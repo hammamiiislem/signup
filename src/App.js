@@ -1,5 +1,6 @@
 
 import Signap from './components/Signap'
+import Login from './components/login';
 import { Route, Router, Routes } from "react-router-dom";
 
 
@@ -9,6 +10,8 @@ function App() {
   
     <Routes>
           <Route path="/Signap" element={<Signap/>} />
+          <Route path="/login" element={<Login/>} />
+          <Route path="/dashboard" element={<h1>Dashboard</h1>} />
     </Routes>
     
 )
@@ -16,4 +19,6 @@ function App() {
   }
   
 
+
 export default App;
+
