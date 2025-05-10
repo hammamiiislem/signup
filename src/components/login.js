@@ -22,8 +22,11 @@ function Login() {
     }
     if (data.password.length < 6) {
       errors.password = "please enter your password";
-    }}
-  const navigate = useNavigate();
+    } 
+    return errors;
+   }
+const navigate = useNavigate();
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -31,7 +34,7 @@ function Login() {
   };
 
   const handleEnvoyer = async (e) => {
-    e.preventDefault(); // important pour empêcher le rechargement de page
+    // important pour empêcher le rechargement de page
     const validationErrors=validateForm();
     setError(validationErrors);
     if (Object.keys(validationErrors).length > 0) {
@@ -42,7 +45,9 @@ function Login() {
       position: "top-right",
       autoClose: 5000,})
     })
-      return;
+      return;}
+     e.preventDefault();
+  
     try {
       const response = await axios.post('/user/login', data);
       console.log(response);
@@ -50,7 +55,7 @@ function Login() {
     } catch (err) {
       console.error(err);
     }
-  }};
+  };
 
   return (
     <Container className="mt-5">
