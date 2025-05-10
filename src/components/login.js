@@ -7,13 +7,22 @@ import Row from 'react-bootstrap/Row';
 import Form from 'react-bootstrap/Form';
 import { Button, Card, Container } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { ToastContainer, toast } from 'react-toastify';
 
 function Login() {
   const [data, setData] = useState({
     email: '',
     password: ''
   });
-
+  const [error, setError] = useState({})
+  const validateForm = () => {
+    let errors = {};
+    if (data.email === '') {
+      errors.email = "please enter your email";
+    }
+    if (data.password.length < 6) {
+      errors.password = "please enter your password";
+    }}
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -23,14 +32,25 @@ function Login() {
 
   const handleEnvoyer = async (e) => {
     e.preventDefault(); // important pour empêcher le rechargement de page
+    const validationErrors=validateForm();
+    setError(validationErrors);
+    if (Object.keys(validationErrors).length > 0) {
+      // Display the error messages using toast
+   console.log(error);
+   Object.keys(validationErrors).forEach((key) => {
+    toast.error(validationErrors[key], {
+      position: "top-right",
+      autoClose: 5000,})
+    })
+      return;
     try {
-      const response = await axios.post('/user/addUser', data);
+      const response = await axios.post('/user/login', data);
       console.log(response);
       navigate('/dashboard');
     } catch (err) {
       console.error(err);
     }
-  };
+  }};
 
   return (
     <Container className="mt-5">
