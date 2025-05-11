@@ -1,128 +1,170 @@
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import Row from 'react-bootstrap/Row';
-import 'bootstrap/dist/css/bootstrap.min.css'
-import { Button, Card, Container } from 'react-bootstrap';
 import { useState } from 'react';
-import login from './login';
-import axios from '../configuration/axiosconfig';
 import { useNavigate } from 'react-router-dom';
+import axios from '../configuration/axiosconfig';
+
+import { Container, Card, Form, Button, Row, Col } from 'react-bootstrap';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import { ToastContainer, toast } from 'react-toastify';
 
-
-
 function SIGNUP() {
-  const [data, setdata] = useState({
+  const navigate = useNavigate();
+
+ 
+  const [data, setData] = useState({
     nom: '',
     prenom: '',
+    age: '',
     email: '',
     password: '',
     confirmpassword: '',
-  })
-  const [error, setError] = useState({})
-  const validateForm = () => {
-    console.log("validating form");
-    let errors = {};
-    if (data.nom === '') {
-      errors.nom = "please enter your name";
-    }
-    if (data.prenom === '') {
-      errors.prenom = "please enter your prenom";
-    }
-    if (data.email === '') {
-      errors.email = "please enter your email";
-    }
-    if (data.password.length < 6) {
-      errors.password = "please enter your password";
-    }
-    if (data.confirmpassword !== data.password) {
-      errors.confirmpassword = "passwords do not match";
-    }
- 
-    return errors}
+  });
 
-  const navigate = useNavigate();
+  const [error, setError] = useState({});
+
+ 
+  const validateForm = () => {
+    const errors = {};
+
+    if (data.nom.trim() === '') {
+      errors.nom = "Please enter your name";
+    }
+
+    if (data.prenom.trim() === '') {
+      errors.prenom = "Please enter your first name";
+    }
+
+    if (data.email.trim() === '') {
+      errors.email = "Please enter your email";
+    }
+
+    if (data.password.length < 6) {
+      errors.password = "Password must be at least 6 characters";
+    }
+
+    if (data.confirmpassword !== data.password) {
+      errors.confirmpassword = "Passwords do not match";
+    }
+
+    return errors;
+  };
+
+
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setdata({ ...data, [name]: value });
-  }
+    setData({ ...data, [name]: value });
+  };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-  const handleSubmit = async () => {
-    const validationErrors=validateForm();
+    const validationErrors = validateForm();
     setError(validationErrors);
+
     if (Object.keys(validationErrors).length > 0) {
-      // Display the error messages using toast
-      console.log(error);
-   Object.keys(validationErrors).forEach((key) => {
-    toast.error(validationErrors[key], {
-      position: "top-right",
-      autoClose: 5000,})
-    })
+      Object.values(validationErrors).forEach((msg) => {
+        toast.error(msg, {
+          position: "top-right",
+          autoClose: 5000,
+        });
+      });
       return;
     }
 
-
-
     try {
-
-      const respons = await axios.post('/user/addUser', data);
-      console.log(respons);
-
+      const response = await axios.post('/user/addUser', data);
+      console.log(response);
       navigate('/login');
     } catch (err) {
-      console.log(err);
+      console.error(err);
+      toast.error("Signup failed. Please try again.");
     }
-
-
-  }
-
-
+  };
 
 
   return (
-
-    <Container className='d-flex align-items-center justify-content-center' style={{ minHeight: "100vh" }}>
-      <Card style={{ width: '30rem', }} className='shadow'>
-
-        <Form>
+    <Container
+      className="d-flex align-items-center justify-content-center"
+      style={{ minHeight: "100vh" }}
+    >
+      <Card style={{ width: '30rem' }} className="shadow p-4">
+        <Form onSubmit={handleSubmit}>
+          <Row>
+            <Col className="mb-3">
+              <Form.Control
+                name="prenom"
+                placeholder="First name"
+                value={data.prenom}
+                onChange={handleChange}
+              />
+            </Col>
+            <Col className="mb-3">
+              <Form.Control
+                name="nom"
+                placeholder="Last name"
+                value={data.nom}
+                onChange={handleChange}
+              />
+            </Col>
+          </Row>
 
           <Row>
-            <Col className='mx-3 my-5'>
-              <Form.Control value={data.prenom} onChange={handleChange} name="prenom" placeholder="First name" />
-            </Col>
-            <Col className='mx-3 my-5'>
-              <Form.Control value={data.nom} onChange={handleChange} name="nom" placeholder="Last name" />
+            <Col className="mb-3">
+              <Form.Control
+                name="age"
+                type="number"
+                placeholder="Age"
+                value={data.age}
+                onChange={handleChange}
+              />
             </Col>
           </Row>
-          <Row>
-            <Col className='mx-3 my-5'>
-              <Form.Control value={data.age} onChange={handleChange} name="age" type="number" placeholder="age" />
-            </Col>
 
+          <Row>
+            <Col className="mb-3">
+              <Form.Control
+                name="email"
+                type="email"
+                placeholder="Email"
+                value={data.email}
+                onChange={handleChange}
+              />
+            </Col>
           </Row>
-          <Row >
-            <Col className='my-5 mx-3'>
-              <Form.Control value={data.email} onChange={handleChange} name="email" placeholder="Email" />
-            </Col>
-            <Col className='my-5 mx-3'>
-              <Form.Control value={data.password} onChange={handleChange} name="password" type="password" placeholder="Password" />
-            </Col>
-            <Col className='my-5 mx-3'>
-              <Form.Control value={data.confirmpassword} onChange={handleChange} name="confirmpassword" type="password" placeholder="Confirme Password" />
+
+          <Row>
+            <Col className="mb-3">
+              <Form.Control
+                name="password"
+                type="password"
+                placeholder="Password"
+                value={data.password}
+                onChange={handleChange}
+              />
             </Col>
           </Row>
-          <div className='d-flex justify-content-center'>
-            <Button variant="primary" onClick={handleSubmit} >submit</Button>
+
+          <Row>
+            <Col className="mb-3">
+              <Form.Control
+                name="confirmpassword"
+                type="password"
+                placeholder="Confirm Password"
+                value={data.confirmpassword}
+                onChange={handleChange}
+              />
+            </Col>
+          </Row>
+
+          <div className="text-center">
+            <Button type="submit" variant="primary">
+              Submit
+            </Button>
           </div>
-
         </Form>
       </Card>
       <ToastContainer />
-
     </Container>
-  )
+  );
 }
 
-
-export default SIGNUP
+export default SIGNUP;
