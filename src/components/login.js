@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from '../configuration/axiosconfig';
 
 import { Container, Card, Form, Button } from 'react-bootstrap';
@@ -55,7 +55,7 @@ function Login() {
     try {
       const response = await axios.post('/user/login', data);
       localStorage.setItem('token', response.data.token);
-      navigate('/dashboard');
+      navigate('/profile');
     } catch (err) {
       console.error(err);
       toast.error("Login failed. Please try again.");
@@ -94,6 +94,7 @@ function Login() {
           <Button variant="primary" type="submit">
             Se connecter
           </Button>
+          <Link to="/Signap" className="btn btn-link">Creat an account</Link>
         </Form>
       </Card>
 

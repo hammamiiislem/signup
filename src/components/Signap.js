@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import axios from '../configuration/axiosconfig';
 
 import { Container, Card, Form, Button, Row, Col } from 'react-bootstrap';
@@ -159,6 +159,7 @@ function SIGNUP() {
             <Button type="submit" variant="primary">
               Submit
             </Button>
+            <Link to="/login" className="btn btn-link">Sign In instead</Link>
           </div>
         </Form>
       </Card>

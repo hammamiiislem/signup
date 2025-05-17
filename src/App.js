@@ -1,6 +1,7 @@
 
 import Signap from './components/Signap'
 import Login from './components/login';
+import Profile from './components/profile';
 import Dashboard from './components/dashboard';
 import { Route, Router, Routes } from "react-router-dom";
 
@@ -12,7 +13,7 @@ function App() {
     <Routes>
           <Route path="/Signap" element={<Signap/>} />
           <Route path="/login" element={<Login/>} />
-          <Route path="/dashboard" element={<Dashboard/>} />
+          <Route path="/profile" element={<Profile/>} />
     </Routes>
     
 )
